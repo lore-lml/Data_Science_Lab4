@@ -1,6 +1,7 @@
 import numpy as np
 from random import randint
 from math import sqrt
+import matplotlib.pyplot as plt
 
 
 def _euclidean_distance(X, Y):
@@ -47,6 +48,7 @@ class KMeans:
             centroids.append(l)
 
         self.centroids = np.array(centroids, dtype=np.int_)
+        # self._scatter_plot(X)
 
     def _assign_clusters(self, X):
         self.labels = [[] for i in range(self.n_clusters)]
@@ -66,12 +68,15 @@ class KMeans:
 
         for i in range(self.n_clusters):
             centroid_points = np.array(self.labels[i], dtype=np.int_)
-            x_c = np.mean(X[centroid_points, 0])
-            y_c = np.mean(X[centroid_points, 1])
-            centroids.append([x_c, y_c])
+            if centroid_points.size > 0:
+                x_c = np.mean(X[centroid_points, 0])
+                y_c = np.mean(X[centroid_points, 1])
+                centroids.append([x_c, y_c])
+            else:
+                centroids.append([self.centroids[i, 0], self.centroids[i, 1]])
 
         centroids = np.array(centroids)
         are_equal = np.array_equal(self.centroids, centroids)
-        if are_equal:
+        if not are_equal:
             self.centroids = centroids
         return are_equal
