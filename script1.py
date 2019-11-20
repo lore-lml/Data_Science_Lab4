@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from Kmeans import KMeans
+from KMeans import KMeans
+from silhouette import silhouette_score
 
-CLUSTERS = 15
+CLUSTERS = (15, 6)
 
 
 def get_coordinates_from_file(path):
@@ -16,9 +17,9 @@ if __name__ == '__main__':
     for i in range(2):
         X = get_coordinates_from_file(files_in[i])
 
-        kmeans = KMeans(CLUSTERS)
+        kmeans = KMeans(CLUSTERS[i])
         labels, centroids = kmeans.fit_predict(X)
-        kmeans.dump_to_file(files_out[i])
+        # kmeans.dump_to_file(files_out[i])
 
         _, ax = plt.subplots(figsize=(6, 6), dpi=90)
         ax.scatter(X[:, 0], X[:, 1])
@@ -27,6 +28,7 @@ if __name__ == '__main__':
 
         _, ax = plt.subplots(figsize=(6, 6), dpi= 90)
         for l in labels:
-            l = np.array(l)
+            l = np.array(l, dtype=np.int_)
             ax.scatter(X[l, 0], X[l, 1])
         plt.show()
+        print(f"Silhouette score = {silhouette_score(X, kmeans.labels_output())}")

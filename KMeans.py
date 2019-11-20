@@ -1,5 +1,4 @@
 import numpy as np
-from random import randint
 from math import sqrt
 
 
@@ -43,11 +42,8 @@ class KMeans:
 
         centroids = []
         for i in range(self.n_clusters):
-            """l = [randint(0, self._max_x), randint(0, self._max_y)]
-            centroids.append(l)"""
             l = [np.random.uniform(0, self._max_x), np.random.uniform(0, self._max_y)]
             centroids.append(l)
-
 
         self.centroids = np.array(centroids)
         # self._scatter_plot(X)
@@ -82,3 +78,15 @@ class KMeans:
         if not are_equal:
             self.centroids = centroids
         return are_equal
+
+    def labels_output(self):
+        if len(self.labels) <= 0:
+            return None
+
+        labels = []
+        for cent, ids in enumerate(self.labels):
+            for id in ids:
+                labels.append([id, cent])
+
+        labels.sort(key=lambda x: x[0])
+        return np.array(labels)[:, 1]
